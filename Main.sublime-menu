@@ -1,0 +1,31 @@
+[
+    {
+        "mnemonic": "n",
+        "caption": "Preferences",
+        "id": "preferences",
+        "children": [
+            {
+                "mnemonic": "P",
+                "caption": "Package Settings",
+                "id": "package-settings",
+                "children": [
+                    {
+                        "caption": "SunCycle",
+                        "children": [
+                            {
+                                "command": "open_file",
+                                "args": {"file": "${packages}/NightCycle/NightCycle.sublime-settings"},
+                                "caption": "Settings – Default"
+                            },
+                            {
+                                "command": "open_file",
+                                "args": {"file": "${packages}/User/NightCycle.sublime-settings"},
+                                "caption": "Settings – User"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
