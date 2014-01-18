@@ -18,11 +18,11 @@ Install with [Package Control](https://sublime.wbond.net/).
     "latitude": 47.497912,
     "longitude": 19.040235,
     "day": {
-        "colorScheme": "Packages/Color Scheme - Default/Solarized (Light).tmTheme",
+        "color_scheme": "Packages/Color Scheme - Default/Solarized (Light).tmTheme",
         "theme": "Default.sublime-theme"
     },
     "night": {
-        "colorScheme": "Packages/Color Scheme - Default/Solarized (Dark).tmTheme",
+        "color_scheme": "Packages/Color Scheme - Default/Solarized (Dark).tmTheme",
         "theme": "Default.sublime-theme"
     }
 }
