@@ -14,12 +14,12 @@
                         "children": [
                             {
                                 "command": "open_file",
-                                "args": {"file": "${packages}/NightCycle/NightCycle.sublime-settings"},
+                                "args": {"file": "${packages}/SunCycle/SunCycle.sublime-settings"},
                                 "caption": "Settings – Default"
                             },
                             {
                                 "command": "open_file",
-                                "args": {"file": "${packages}/User/NightCycle.sublime-settings"},
+                                "args": {"file": "${packages}/User/SunCycle.sublime-settings"},
                                 "caption": "Settings – User"
                             }
                         ]
