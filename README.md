@@ -29,8 +29,7 @@ Install with [Package Control](https://sublime.wbond.net/).
 ```
 
 ## Todo
-* Fix DST (?) difference / Test multiple locations
 * Allow address string lookup (Google Maps API) instead of coordinates (needs caching)
 * Derive location from IP address? (needs caching)
 
-Based on [NightCycle](https://github.com/forty-two/NightCycle) and Michel Anders' [blogpost](http://michelanders.blogspot.hu/2010/12/calulating-sunrise-and-sunset-in-python.html).
+Inspired by [NightCycle](https://github.com/forty-two/NightCycle) and based on Michel Anders' [blogpost](http://michelanders.blogspot.hu/2010/12/calulating-sunrise-and-sunset-in-python.html).
