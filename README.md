@@ -4,7 +4,7 @@ SunCycle
 Sublime Text theme switch based on sunrise and sunset at your location.
 
 ## Background
-Sublime Text comes with 2 excelent color schemes called Solarized (Light) and Solarized (Dark) which are each at their best during, respectively, day and night.
+Sublime Text comes with 2 excellent color schemes called Solarized (Light) and Solarized (Dark) which are each at their best during, respectively, day and night.
 The [NightCycle](https://github.com/forty-two/NightCycle) package by forty-two offers the option to switch between them based on timespans you configure.
 
 There is one more thing though: the sun rises and sets at different times during the year (also, there is this thing called [DST](http://en.wikipedia.org/wiki/Daylight_saving_time)). This package fixes that for you: your local (currently manual configuration) sunrise and sunset times are used to switch color schemes.
