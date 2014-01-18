@@ -33,19 +33,22 @@ class Sun:
         if when is None : when = datetime.now(tz=LocalTimezone())
         self.__preptime(when)
         self.__calc()
-        return Sun.__timefromdecimalday(self.sunrise_t)
+        t = Sun.__timefromdecimalday(self.sunrise_t)
+        return when.replace(hour=t.hour,minute=t.minute,second=t.second)
         
     def sunset(self,when=None):
         if when is None : when = datetime.now(tz=LocalTimezone())
         self.__preptime(when)
         self.__calc()
-        return Sun.__timefromdecimalday(self.sunset_t)
+        t = Sun.__timefromdecimalday(self.sunset_t)
+        return when.replace(hour=t.hour,minute=t.minute,second=t.second)
         
     def solarnoon(self,when=None):
         if when is None : when = datetime.now(tz=LocalTimezone())
         self.__preptime(when)
         self.__calc()
-        return Sun.__timefromdecimalday(self.solarnoon_t)
+        t = Sun.__timefromdecimalday(self.solarnoon_t)
+        return when.replace(hour=t.hour,minute=t.minute,second=t.second)
         
     @staticmethod
     def __timefromdecimalday(day):
@@ -79,7 +82,7 @@ class Sun:
         self.timezone=0
         offset=when.utcoffset()
         if not offset is None:
-            self.timezone=offset.seconds/3600.0
+            self.timezone=offset.seconds/3600.0 + (offset.days * 24)
         
     def __calc(self):
         """
