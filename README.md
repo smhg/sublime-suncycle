@@ -30,5 +30,5 @@ Install with [Package Control](https://sublime.wbond.net/).
 
 ## Todo
 * Fix DST (?) difference / Test multiple locations
-* Allow address string instead of coordinates
+* Allow address string lookup (Google Maps API) instead of coordinates (needs caching)
 * Derive location from IP address? (needs caching)
