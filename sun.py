@@ -8,21 +8,20 @@ from datetime import datetime,time
 from timezone import LocalTimezone
 
 class Sun:
-    """ 
+    """
     Calculate sunrise and sunset based on equations from NOAA
     http://www.srrb.noaa.gov/highlights/sunrise/calcdetails.html
 
     typical use, calculating the sunrise at the present day:
-    
+
     import datetime
     import sunrise
     s = Sun(lat=49,long=3)
     print('sunrise at ',s.sunrise(when=datetime.datetime.now())
     """
-    def __init__(self,lat=0,long=0):
-        self.lat=lat
-        self.long=long
-        
+    def __init__(self,coordinates):
+        self.coordinates = coordinates
+
     def sunrise(self,when=None):
         """
         return the time of sunrise as a datetime.time object
@@ -35,26 +34,26 @@ class Sun:
         self.__calc()
         t = Sun.__timefromdecimalday(self.sunrise_t)
         return when.replace(hour=t.hour,minute=t.minute,second=t.second)
-        
+
     def sunset(self,when=None):
         if when is None : when = datetime.now(tz=LocalTimezone())
         self.__preptime(when)
         self.__calc()
         t = Sun.__timefromdecimalday(self.sunset_t)
         return when.replace(hour=t.hour,minute=t.minute,second=t.second)
-        
+
     def solarnoon(self,when=None):
         if when is None : when = datetime.now(tz=LocalTimezone())
         self.__preptime(when)
         self.__calc()
         t = Sun.__timefromdecimalday(self.solarnoon_t)
         return when.replace(hour=t.hour,minute=t.minute,second=t.second)
-        
+
     @staticmethod
     def __timefromdecimalday(day):
         """
         returns a datetime.time object.
-        
+
         day is a decimal day between 0.0 and 1.0, e.g. noon = 0.5
         """
         hours  = 24.0*day
@@ -67,38 +66,38 @@ class Sun:
 
     def __preptime(self,when):
         """
-        Extract information in a suitable format from when, 
+        Extract information in a suitable format from when,
         a datetime.datetime object.
         """
         # datetime days are numbered in the Gregorian calendar
         # while the calculations from NOAA are distibuted as
         # OpenOffice spreadsheets with days numbered from
-        # 1/1/1900. The difference are those numbers taken for 
+        # 1/1/1900. The difference are those numbers taken for
         # 18/12/2010
         self.day = when.toordinal()-(734124-40529)
         t=when.time()
         self.time= (t.hour + t.minute/60.0 + t.second/3600.0)/24.0
-        
+
         self.timezone=0
         offset=when.utcoffset()
         if not offset is None:
             self.timezone=offset.seconds/3600.0 + (offset.days * 24)
-        
+
     def __calc(self):
         """
         Perform the actual calculations for sunrise, sunset and
         a number of related quantities.
-        
+
         The results are stored in the instance variables
         sunrise_t, sunset_t and solarnoon_t
         """
         timezone = self.timezone # in hours, east is positive
-        longitude= self.long     # in decimal degrees, east is positive
-        latitude = self.lat      # in decimal degrees, north is positive
+        longitude= self.coordinates['longitude']     # in decimal degrees, east is positive
+        latitude = self.coordinates['latitude']      # in decimal degrees, north is positive
 
         time  = self.time # percentage past midnight, i.e. noon  is 0.5
         day      = self.day     # daynumber 1=1/1/1900
-    
+
         Jday     =day+2415018.5+time-timezone/24 # Julian day
         Jcent    =(Jday-2451545)/36525    # Julian century
 
@@ -112,7 +111,7 @@ class Sun:
         Struelong= Mlong+Seqcent
         Sapplong = Struelong-0.00569-0.00478*sin(rad(125.04-1934.136*Jcent))
         declination = deg(asin(sin(rad(obliq))*sin(rad(Sapplong))))
-        
+
         eqtime   = 4*deg(vary*sin(2*rad(Mlong))-2*Eccent*sin(rad(Manom))+4*Eccent*vary*sin(rad(Manom))*cos(2*rad(Mlong))-0.5*vary*vary*sin(4*rad(Mlong))-1.25*Eccent*Eccent*sin(2*rad(Manom)))
 
         hourangle= deg(acos(cos(rad(90.833))/(cos(rad(latitude))*cos(rad(declination)))-tan(rad(latitude))*tan(rad(declination))))
@@ -122,6 +121,6 @@ class Sun:
         self.sunset_t   =self.solarnoon_t+hourangle*4/1440
 
 if __name__ == "__main__":
-    s = Sun(lat=52.37,long=4.90)
+    s = Sun({'latitude': 52.37, 'longitude': 4.90})
     print(datetime.today())
     print(s.sunrise(),s.solarnoon(),s.sunset())
