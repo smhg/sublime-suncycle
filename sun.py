@@ -1,11 +1,13 @@
 # source: http://michelanders.blogspot.hu/2010/12/calulating-sunrise-and-sunset-in-python.html
-
 from math import cos,sin,acos,asin,tan
 from math import degrees as deg, radians as rad
 from datetime import datetime,time
 
 # this module is not provided here. See text.
-from timezone import LocalTimezone
+try:
+    from timezone import LocalTimezone
+except (ImportError):
+    from .timezone import LocalTimezone
 
 class Sun:
     """

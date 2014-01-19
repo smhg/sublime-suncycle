@@ -1,16 +1,28 @@
 import sublime
 from datetime import datetime,timedelta
-from timezone import FixedOffset,LocalTimezone
-from sun import Sun
-import calendar,urllib2,json
+from os import path
+import calendar,json
+
+pyVersion = 2
+try:
+    import urllib2 as urllib
+    from sun import Sun
+    from timezone import FixedOffset,LocalTimezone
+except (ImportError):
+    pyVersion = 3
+    import urllib.request as urllib
+    from .sun import Sun
+    from .timezone import FixedOffset,LocalTimezone
 
 INTERVAL = 10 # interval in minutes to do new cycle check
 
 TZ_URL = 'https://maps.googleapis.com/maps/api/timezone/json?location={0},{1}&timestamp={2}&sensor=false'
 TZ_CACHE_LIFETIME = timedelta(days=1)
 
+PACKAGE = path.splitext(path.basename(__file__))[0]
+
 def logToConsole(str):
-    print(__name__ + ': {0}'.format(str))
+    print(PACKAGE + ': {0}'.format(str))
 
 class Settings():
     def __init__(self, onChange=None):
@@ -30,8 +42,11 @@ class Settings():
 
     def _getGoogleTimezoneData(self, timestamp):
         url = TZ_URL.format(self.coordinates['latitude'], self.coordinates['longitude'], timestamp)
-        response = urllib2.urlopen(url, None, 2)
-        return json.loads(response.read())
+        response = urllib.urlopen(url, None, 2)
+        result = response.read()
+        if (pyVersion == 3):
+            result = result.decode('utf-8')
+        return json.loads(result)
 
     def getTimeZone(self):
         now = datetime.utcnow()
@@ -52,9 +67,9 @@ class Settings():
             return LocalTimezone()
 
     def load(self):
-        settings = sublime.load_settings(__name__ + '.sublime-settings')
-        settings.clear_on_change(__name__)
-        settings.add_on_change(__name__, self.load)
+        settings = sublime.load_settings(PACKAGE + '.sublime-settings')
+        settings.clear_on_change(PACKAGE)
+        settings.add_on_change(PACKAGE, self.load)
 
         if not settings.has('day'):
             raise KeyError('SunCycle: missing day setting')
