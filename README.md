@@ -31,7 +31,6 @@ Install with [Package Control](https://sublime.wbond.net/).
 ```
 
 ## Todo
-* Test in Sublime Text 3
 * Allow address string lookup (Google Maps API) instead of coordinates (needs caching)
 * Derive location from IP address? (needs caching)
 
