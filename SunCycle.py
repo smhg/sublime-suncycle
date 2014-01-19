@@ -99,13 +99,13 @@ class SunCycle():
         newColorScheme = config.get('color_scheme')
 
         if newColorScheme and newColorScheme != sublimeSettings.get('color_scheme'):
-            logToConsole('switching to new color scheme: %s' % newColorScheme)
+            logToConsole('Switching to new color scheme: %s' % newColorScheme)
             sublimeSettings.set('color_scheme', newColorScheme)
             sublimeSettingsChanged = True
 
         newTheme = config.get('theme')
         if newTheme and newTheme != sublimeSettings.get('theme'):
-            logToConsole('switching to new theme: %s' % newTheme)
+            logToConsole('Switching to new theme: %s' % newTheme)
             sublimeSettings.set('theme', newTheme)
             sublimeSettingsChanged = True
 
