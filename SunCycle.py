@@ -3,11 +3,17 @@ from datetime import datetime
 from timezone import LocalTimezone
 from sun import Sun
 
+def logToConsole(str):
+    print(__name__ + ': ' + str)
+
 class Settings():
     def __init__(self, onChange=None):
         self.loaded = False
         self.onChange = onChange
         self.load()
+
+    def getTimeZone(self, lat, lon):
+        return LocalTimezone()
 
     def load(self):
         settings = sublime.load_settings(__name__ + '.sublime-settings')
@@ -23,9 +29,14 @@ class Settings():
         self.day = settings.get('day')
         self.night = settings.get('night')
 
-        self.sun = Sun(settings.get('latitude', 0), settings.get('longitude', 0))
-        print('SunCycle: sunrise at %s' % self.sun.sunrise())
-        print('SunCycle: sunset at %s' % self.sun.sunset())
+        lat = settings.get('latitude', 0)
+        lon = settings.get('longitude', 0)
+        self.sun = Sun(lat, lon)
+        self.tz = self.getTimeZone(lat, lon)
+
+        now = datetime.now(tz=self.tz)
+        logToConsole('sunrise at %s' % self.sun.sunrise(now))
+        logToConsole('sunset at %s' % self.sun.sunset(now))
 
         if self.loaded and self.onChange:
             self.onChange()
@@ -40,7 +51,7 @@ class SunCycle():
 
     def getDayOrNight(self):
         s = self.settings.sun
-        now = datetime.now(tz=LocalTimezone())
+        now = datetime.now(tz=self.settings.tz)
         return 'day' if now >= s.sunrise(now) and now <= s.sunset(now) else 'night'
 
     def cycle(self):
@@ -54,13 +65,13 @@ class SunCycle():
         newColorScheme = config.get('color_scheme')
 
         if newColorScheme and newColorScheme != sublimeSettings.get('color_scheme'):
-            print('SunCycle: switching to new color scheme: %s' % newColorScheme)
+            logToConsole('switching to new color scheme: %s' % newColorScheme)
             sublimeSettings.set('color_scheme', newColorScheme)
             sublimeSettingsChanged = True
-            
+
         newTheme = config.get('theme')
         if newTheme and newTheme != sublimeSettings.get('theme'):
-            print('SunCycle: switching to new theme: %s' % newTheme)
+            logToConsole('switching to new theme: %s' % newTheme)
             sublimeSettings.set('theme', newTheme)
             sublimeSettingsChanged = True
 
@@ -79,7 +90,9 @@ class SunCycle():
     def stop(self):
         self.halt = True
 
+# stop previous instance
 if 'sunCycle' in globals():
     globals()['sunCycle'].stop()
 
+# start cycle
 sunCycle = SunCycle()
