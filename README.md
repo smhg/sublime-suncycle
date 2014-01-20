@@ -31,7 +31,8 @@ Install with [Package Control](https://sublime.wbond.net/).
 ```
 
 ## Todo
-* Allow address string lookup (Google Maps API) instead of coordinates (needs caching)
-* Derive location from IP address? (needs caching)
+* Cache timezone lookup
+* Address to location coordinates (using Google Geocoding API)
+* IP to location coordinates (using http://freegeoip.net/)
 
 Inspired by [NightCycle](https://github.com/forty-two/NightCycle) and based on Michel Anders' [blogpost](http://michelanders.blogspot.hu/2010/12/calulating-sunrise-and-sunset-in-python.html).
