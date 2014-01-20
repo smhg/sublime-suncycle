@@ -1,7 +1,7 @@
 SunCycle
 ========
 
-Sublime Text theme switch based on sunrise and sunset at your location.
+Sublime Text layout switch based on sunrise and sunset at your location.
 
 ![Sublime Text Console](http://smhg.github.io/SunCycle/suncycle.png)
 
