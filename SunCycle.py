@@ -14,7 +14,12 @@ except (ImportError):
     from .sun import Sun
     from .timezone import FixedOffset,LocalTimezone
 
-INTERVAL = 10 # interval in minutes to do new cycle check
+INTERVAL = 0.3 # interval in minutes to do new cycle check
+
+ST2_THEME_PREFIX = 'Packages/Color Scheme - Default/'
+ST2_THEME_SUFFIX = '.tmTheme'
+ST3_THEME_PREFIX = 'Packages/User/'
+ST3_THEME_SUFFIX = ' (SL).tmTheme'
 
 TZ_URL = 'https://maps.googleapis.com/maps/api/timezone/json?location={0},{1}&timestamp={2}&sensor=false'
 TZ_CACHE_LIFETIME = timedelta(days=1)
@@ -111,9 +116,16 @@ class SunCycle():
             raise Exception('Preferences not loaded')
 
         sublimeSettingsChanged = False
-        newColorScheme = config.get('color_scheme')
 
-        if newColorScheme and newColorScheme != sublimeSettings.get('color_scheme'):
+        compareWith = newColorScheme = config.get('color_scheme')
+
+        # color scheme name matching in Sublime Text 3
+        if pyVersion == 3 and newColorScheme.startswith(ST2_THEME_PREFIX) and newColorScheme.endswith(ST2_THEME_SUFFIX):
+            compareWith = (ST3_THEME_PREFIX +
+                          newColorScheme.replace(ST2_THEME_PREFIX, '').replace(ST2_THEME_SUFFIX, '') +
+                          ST3_THEME_SUFFIX)
+
+        if newColorScheme and compareWith != sublimeSettings.get('color_scheme'):
             logToConsole('Switching to {0}'.format(newColorScheme))
             sublimeSettings.set('color_scheme', newColorScheme)
             sublimeSettingsChanged = True
