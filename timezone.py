@@ -13,7 +13,7 @@ class UTC(tzinfo):
     def utcoffset(self, dt):
         return ZERO
 
-    def tzname(self, dt):
+    def tzname(self, dt=None):
         return "UTC"
 
     def dst(self, dt):
@@ -35,7 +35,7 @@ class FixedOffset(tzinfo):
     def utcoffset(self, dt):
         return self.__offset
 
-    def tzname(self, dt):
+    def tzname(self, dt=None):
         return self.__name
 
     def dst(self, dt):
