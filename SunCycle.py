@@ -24,6 +24,9 @@ ST3_THEME_SUFFIX = ' (SL).tmTheme'
 TZ_URL = 'https://maps.googleapis.com/maps/api/timezone/json?location={0},{1}&timestamp={2}&sensor=false'
 TZ_CACHE_LIFETIME = timedelta(days=1)
 
+IP2LOC_URL = 'http://freegeoip.net/json/'
+IP2LOC_CACHE_LIFETIME = timedelta(hours=3)
+
 PACKAGE = path.splitext(path.basename(__file__))[0]
 
 def logToConsole(str):
@@ -33,8 +36,16 @@ class Settings():
     def __init__(self, onChange=None):
         self.loaded = False
         self._tzcache = None
+        self._ip2loccache = None
+        self.hardcodedLocation = False
         self.onChange = onChange
         self.load()
+
+    def _needsIp2LocCacheRefresh(self, datetime):
+        if not self._ip2loccache:
+            return True
+
+        return self._ip2loccache['date'] < (datetime - IP2LOC_CACHE_LIFETIME)
 
     def _needsTzCacheRefresh(self, datetime):
         if not self._tzcache:
@@ -57,6 +68,12 @@ class Settings():
         now = datetime.utcnow()
 
         try:
+            if not(self.hardcodedLocation) and self._needsIp2LocCacheRefresh(now):
+                self.loadIPCoordinates()
+                self._ip2loccache = {
+                    'date': now
+                }
+
             if self._needsTzCacheRefresh(now):
                 result = self._getGoogleTimezoneData(calendar.timegm(now.timetuple()))
                 self._tzcache = {
@@ -88,6 +105,9 @@ class Settings():
         self.coordinates = {'latitude': settings.get('latitude', 0), 'longitude': settings.get('longitude', 0)}
         self.sun = Sun(self.coordinates)
 
+        if self.coordinates['latitude'] != 0 or self.coordinates['longitude'] != 0:
+            self.hardcodedLocation = True
+
         now = datetime.now(tz=self.getTimeZone())
         logToConsole('Sunrise at {0}'.format(self.sun.sunrise(now)))
         logToConsole('Sunset at {0}'.format(self.sun.sunset(now)))
@@ -96,6 +116,22 @@ class Settings():
             self.onChange()
 
         self.loaded = True
+
+    def loadIPCoordinates(self):
+        try:
+            response = urllib.urlopen(IP2LOC_URL, None, 2)
+            result = response.read()
+            if (pyVersion == 3):
+                result = result.decode('utf-8')
+            lookup = json.loads(result)
+
+            self.coordinates['latitude'] = lookup['latitude']
+            self.coordinates['longitude'] = lookup['longitude']
+            logToConsole('Lookup lat & lng through IP: {0}'.format(self.coordinates))
+
+            return self.coordinates
+        except Exception:
+            logToConsole('Failed to lookup lat & lng through IP')
 
 class SunCycle():
     def __init__(self):
