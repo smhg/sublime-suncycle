@@ -32,6 +32,7 @@ Install with [Package Control](https://sublime.wbond.net/).
 The optional `latitude` and `longitude` configuration properties allow you to specify a fixed location (should IP lookup fail).
 
 Inspired by [NightCycle](https://github.com/forty-two/NightCycle) and based on Michel Anders' [blogpost](http://michelanders.blogspot.hu/2010/12/calulating-sunrise-and-sunset-in-python.html).
+Thanks to [Stijn Mathysen](https://github.com/stijnster) for contributing the IP lookup.
 
 ## License
 The MIT License (MIT)
