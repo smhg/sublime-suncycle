@@ -167,15 +167,8 @@ class SunCycle():
 
         sublimeSettingsChanged = False
 
-        compareWith = newColorScheme = config.get('color_scheme')
-
-        # color scheme name matching in Sublime Text 3
-        if pyVersion == 3 and newColorScheme.startswith(ST2_THEME_PREFIX) and newColorScheme.endswith(ST2_THEME_SUFFIX):
-            compareWith = (ST3_THEME_PREFIX +
-                          newColorScheme.replace(ST2_THEME_PREFIX, '').replace(ST2_THEME_SUFFIX, '') +
-                          ST3_THEME_SUFFIX)
-
-        if newColorScheme and compareWith != sublimeSettings.get('color_scheme'):
+        newColorScheme = config.get('color_scheme')
+        if newColorScheme and newColorScheme != sublimeSettings.get('color_scheme'):
             logToConsole('Switching to {0}'.format(newColorScheme))
             sublimeSettings.set('color_scheme', newColorScheme)
             sublimeSettingsChanged = True
