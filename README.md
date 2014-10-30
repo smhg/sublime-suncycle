@@ -8,9 +8,9 @@ Sublime Text 3 layout switch based on sunrise and sunset at your location.
 Some of Sublime Text's color schemes are at their best either during day or night.
 This package lets you automatically switch between 2 color schemes (and optionally a theme) based on your local sunrise and sunset (which takes [DST](http://en.wikipedia.org/wiki/Daylight_saving_time) into account).
 
-By default, an IP address lookup with [Telize](http://www.telize.com/) determines your location. So you should be able to safely travel between timezones while your theme switches when the local sun comes up or goes down.
+By default, an IP address lookup with [Telize](http://www.telize.com/) determines your location. So the switch is adjusted when you travel across timezones.
 
-Should the IP lookup fail for some reason, you are still able to hard-code your coordinates in your user preferences file.
+You can hardcode your coordinates in case you don't prefer an IP lookup or it fails.
 
 ## Installation
 Install with [Package Control](https://sublime.wbond.net/).
