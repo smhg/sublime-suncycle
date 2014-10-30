@@ -140,6 +140,9 @@ class Settings():
             self.onChange()
 
         self.loaded = True
+    def unload(self):
+        self._sublimeSettings.clear_on_change(PACKAGE)
+        self.loaded = False
 
 class SunCycle():
     def __init__(self):
@@ -188,6 +191,7 @@ class SunCycle():
 
     def stop(self):
         self.halt = True
+        self.settings.unload()
 
 # stop previous instance
 if 'sunCycle' in globals():
