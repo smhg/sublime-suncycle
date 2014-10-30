@@ -1,10 +1,10 @@
 {
     "day": {
-        "color_scheme": "Packages/Color Scheme - Default/Solarized (Light).tmTheme",
+        "color_scheme": "Packages/User/Solarized (Light) (SL).tmTheme",
         "theme": "Default.sublime-theme"
     },
     "night": {
-        "color_scheme": "Packages/Color Scheme - Default/Solarized (Dark).tmTheme",
+        "color_scheme": "Packages/User/Solarized (Dark) (SL).tmTheme",
         "theme": "Default.sublime-theme"
     }
 }

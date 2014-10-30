@@ -3,28 +3,16 @@ from datetime import datetime,timedelta
 from os import path
 import calendar,json
 
-pyVersion = 2
-try:
-    import urllib2 as urllib
-    from sun import Sun
-    from timezone import FixedOffset,UTC
-except (ImportError):
-    pyVersion = 3
-    import urllib.request as urllib
-    from .sun import Sun
-    from .timezone import FixedOffset,UTC
+import urllib.request as urllib
+from .sun import Sun
+from .timezone import FixedOffset,UTC
 
 INTERVAL = 0.3 # interval in minutes to do new cycle check
-
-ST2_THEME_PREFIX = 'Packages/Color Scheme - Default/'
-ST2_THEME_SUFFIX = '.tmTheme'
-ST3_THEME_PREFIX = 'Packages/User/'
-ST3_THEME_SUFFIX = ' (SL).tmTheme'
 
 TZ_URL = 'https://maps.googleapis.com/maps/api/timezone/json?location={0[latitude]},{0[longitude]}&timestamp={1}&sensor=false'
 TZ_CACHE_LIFETIME = timedelta(days=1)
 
-IP_URL = 'http://freegeoip.net/json/'
+IP_URL = 'http://www.telize.com/geoip'
 IP_CACHE_LIFETIME = timedelta(days=1)
 
 PACKAGE = path.splitext(path.basename(__file__))[0]
@@ -63,10 +51,17 @@ class Settings():
     def _callJsonApi(self, url):
         try:
             response = urllib.urlopen(url, None, 2)
-            result = response.read()
-            if (pyVersion == 3):
-                result = result.decode('utf-8')
+            result = response.read().decode('utf-8')
             return json.loads(result)
+        except urllib.URLError as err:
+            if err.reason == 'unknown url type: https':
+                # on Linux the embedded Python has no SSL support, so try curl
+                try:
+                    logToConsole('todo - add curl')
+                except Exception as err:
+                    logToConsole(err)
+                    logToConsole('Failed to get a result from {0}'.format(url))
+
         except Exception as err:
             logToConsole(err)
             logToConsole('Failed to get a result from {0}'.format(url))
@@ -114,7 +109,7 @@ class Settings():
         return self.timezone
 
     def load(self):
-        settings = sublime.load_settings(PACKAGE + '.sublime-settings')
+        settings = self._sublimeSettings = sublime.load_settings(PACKAGE + '.sublime-settings')
         settings.clear_on_change(PACKAGE)
         settings.add_on_change(PACKAGE, self.load)
 
@@ -169,13 +164,13 @@ class SunCycle():
 
         newColorScheme = config.get('color_scheme')
         if newColorScheme and newColorScheme != sublimeSettings.get('color_scheme'):
-            logToConsole('Switching to {0}'.format(newColorScheme))
+            logToConsole('Switching to color scheme {0}'.format(newColorScheme))
             sublimeSettings.set('color_scheme', newColorScheme)
             sublimeSettingsChanged = True
 
         newTheme = config.get('theme')
         if newTheme and newTheme != sublimeSettings.get('theme'):
-            logToConsole('Switching to {0}'.format(newTheme))
+            logToConsole('Switching to theme {0}'.format(newTheme))
             sublimeSettings.set('theme', newTheme)
             sublimeSettingsChanged = True
 

@@ -1,35 +1,34 @@
 SunCycle
 ========
 
-Sublime Text layout switch based on sunrise and sunset at your location.
+Sublime Text 3 layout switch based on sunrise and sunset at your location.
 
 ![Sublime Text Console](http://smhg.github.io/sublime-suncycle/suncycle.png)
 
-## Background
-Sublime Text comes with 2 excellent color schemes called Solarized (Light) and Solarized (Dark) which are each at their best during, respectively, day and night.
-The [NightCycle](https://github.com/forty-two/NightCycle) package by forty-two offers the option to switch between them based on timespans you configure.
+Some of Sublime Text's color schemes are at their best either during day or night.
+This package lets you automatically switch between 2 color schemes (and optionally a theme) based on your local sunrise and sunset (which takes [DST](http://en.wikipedia.org/wiki/Daylight_saving_time) into account).
 
-There is one more thing though: the sun rises and sets at different times during the year (also, there is this thing called [DST](http://en.wikipedia.org/wiki/Daylight_saving_time)). This package fixes that for you: your local sunrise and sunset times are used to switch color schemes.
+By default, an IP address lookup with [Telize](http://www.telize.com/) determines your location. So you should be able to safely travel between timezones while your theme switches when the local sun comes up or goes down.
 
-By default, an IP address lookup with http://freegeoip.net/ determines your location. The configuration section mentions how to manually enter coordinates.
+Should the IP lookup fail for some reason, you are still able to hard-code your coordinates in your user preferences file.
 
 ## Installation
 Install with [Package Control](https://sublime.wbond.net/).
 
-## Configuration
+## Default preferences
 ```json
 {
     "day": {
-        "color_scheme": "Packages/Color Scheme - Default/Solarized (Light).tmTheme",
+        "color_scheme": "Packages/User/Solarized (Light) (SL).tmTheme",
         "theme": "Default.sublime-theme"
     },
     "night": {
-        "color_scheme": "Packages/Color Scheme - Default/Solarized (Dark).tmTheme",
+        "color_scheme": "Packages/User/Solarized (Dark) (SL).tmTheme",
         "theme": "Default.sublime-theme"
     }
 }
 ```
-The optional `latitude` and `longitude` configuration properties allow you to specify a fixed location (should IP lookup fail).
+The optional `latitude` and `longitude` configuration properties allow you to specify a fixed location.
 
 ## Credits
 Inspired by [NightCycle](https://github.com/forty-two/NightCycle) and based on Michel Anders' [blogpost](http://michelanders.blogspot.hu/2010/12/calulating-sunrise-and-sunset-in-python.html).
