@@ -35,4 +35,4 @@ nosetests.xml
 .project
 .pydevproject
 
-sublime-suncycle.sublime-workspace
+*.sublime-*
