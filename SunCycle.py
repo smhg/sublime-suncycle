@@ -7,6 +7,8 @@ import urllib.request as urllib
 from .sun import Sun
 from .timezone import FixedOffset,UTC
 
+from .package_control_download_wrapper import fetch
+
 INTERVAL = 0.3 # interval in minutes to do new cycle check
 
 TZ_URL = 'https://maps.googleapis.com/maps/api/timezone/json?location={0[latitude]},{0[longitude]}&timestamp={1}&sensor=false'
@@ -50,18 +52,8 @@ class Settings():
 
     def _callJsonApi(self, url):
         try:
-            response = urllib.urlopen(url, None, 2)
-            result = response.read().decode('utf-8')
-            return json.loads(result)
-        except urllib.URLError as err:
-            if err.reason == 'unknown url type: https':
-                # on Linux the embedded Python has no SSL support, so try curl
-                try:
-                    logToConsole('todo - add curl')
-                except Exception as err:
-                    logToConsole(err)
-                    logToConsole('Failed to get a result from {0}'.format(url))
-
+            # on Linux the embedded Python has no SSL support, so we use Package Control's downloader
+            return json.loads(fetch(url).decode('utf-8'))
         except Exception as err:
             logToConsole(err)
             logToConsole('Failed to get a result from {0}'.format(url))
@@ -70,8 +62,7 @@ class Settings():
         return self._callJsonApi(IP_URL)
 
     def _getTimezoneData(self, timestamp):
-        url = TZ_URL.format(self.coordinates, timestamp)
-        return self._callJsonApi(url)
+        return self._callJsonApi(TZ_URL.format(self.coordinates, timestamp))
 
     def getSun(self):
         if self.fixedCoordinates:
