@@ -72,13 +72,19 @@ class Settings():
             return self.sun
 
         now = datetime.utcnow()
-        if self._needsIpCacheRefresh(now):
-            result = self._getIPData()
-            self._ipcache = {'date': now}
-            if 'latitude' in result and 'longitude' in result:
-                self.coordinates = {'latitude': result['latitude'], 'longitude': result['longitude']}
-                logToConsole('Using location [{0[latitude]}, {0[longitude]}] from IP lookup'.format(self.coordinates))
-                self.sun = Sun(self.coordinates)
+        try:
+            if self._needsIpCacheRefresh(now):
+                result = self._getIPData()
+                self._ipcache = {'date': now}
+                if 'latitude' in result and 'longitude' in result:
+                    self.coordinates = {'latitude': result['latitude'], 'longitude': result['longitude']}
+                    logToConsole('Using location [{0[latitude]}, {0[longitude]}] from IP lookup'.format(self.coordinates))
+                    self.sun = Sun(self.coordinates)
+        except TypeError:
+            # Greenwich coordinates
+            self.coordinates = {'latitude': 51.2838, 'longitude': 0}
+            logToConsole('Using location [{0[latitude]}, {0[longitude]}] from Greenwich'.format(self.coordinates))
+            self.sun = Sun(self.coordinates)
 
         if (self.sun):
             return self.sun
@@ -182,7 +188,8 @@ class SunCycle():
 
     def stop(self):
         self.halt = True
-        self.settings.unload()
+        if hasattr(self, 'settings'):
+            self.settings.unload()
 
 # stop previous instance
 if 'sunCycle' in globals():
