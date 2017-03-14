@@ -14,7 +14,7 @@ INTERVAL = 0.3 # interval in minutes to do new cycle check
 TZ_URL = 'https://maps.googleapis.com/maps/api/timezone/json?location={0[latitude]},{0[longitude]}&timestamp={1}&sensor=false'
 TZ_CACHE_LIFETIME = timedelta(days=1)
 
-IP_URL = 'http://www.telize.com/geoip'
+IP_URL = 'https://freegeoip.net/json/'
 IP_CACHE_LIFETIME = timedelta(days=1)
 
 PACKAGE = path.splitext(path.basename(__file__))[0]
