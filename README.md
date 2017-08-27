@@ -1,3 +1,8 @@
+Unmaintained
+============
+This project is no longer maintained (except for PR's, which will still be merged).
+Feel free to create an issue in case you want to take over and I'll transfer the repository.
+
 SunCycle
 ========
 
